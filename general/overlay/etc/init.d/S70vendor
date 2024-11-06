@@ -1,17 +1,17 @@
 #!/bin/sh
 
-# load vendor specific drivers
-vendor=$(ipcinfo -v)
-
-log_vendor() {
-	logger -s -p daemon.info -t ${vendor} "$1"
-}
-
 case "$1" in
 	start)
-		[ "${vendor}" = "goke" ] || [ "${vendor}" = "hisilicon" ] && status=$(check_mac)
-		[ -n "${status}" ] && log_vendor "${status}"
-		echo -e '\nLoading of kernel modules...'
-		load_${vendor} -i
+		echo "Loading vendor modules..."
+		vendor=$(ipcinfo -v)
+		load_"$vendor" -i
+		;;
+
+	stop)
+		;;
+
+	*)
+		echo "Usage: $0 {start}"
+		exit 1
 		;;
 esac
